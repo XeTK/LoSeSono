@@ -1,14 +1,16 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -31,6 +33,8 @@ public class MainActivity extends ActionBarActivity {
         btnSend     = (Button)   findViewById(R.id.btnSend);
         lblGPSLoc   = (TextView) findViewById(R.id.lblGPSLoc);
         txtUserName = (EditText) findViewById(R.id.txtUserName);
+
+        final Context context = getApplicationContext();
 
         // Show location button click event
         btnGetGPS.setOnClickListener(
@@ -70,10 +74,12 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View arg0) {
 
-                    String username = txtUserName.getText().toString();
+                //String username = txtUserName.getText().toString();
 
-                    Toast.makeText(getApplicationContext(), "Submitting Location To Database. For user: " + username, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Submitting Location To Database. For user: " + username, Toast.LENGTH_LONG).show();
 
+                // MessageRestClient.getMessages(MainActivity.this);
+                MessageRestClient.addMessage(MainActivity.this);
                 }
             }
         );
