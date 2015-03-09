@@ -3,5 +3,8 @@
 
     <string name="app_name">LoSeSono Prototype</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login_">Login_Activity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

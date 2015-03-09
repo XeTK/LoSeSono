@@ -1,6 +1,7 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,6 +18,9 @@ public class MainActivity extends ActionBarActivity {
 
     Button btnGetGPS;
     Button btnSend;
+    Button btnLogin;
+    Button btnAddLocation;
+    Button btnRegister;
 
     TextView lblGPSLoc;
 
@@ -29,10 +33,15 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnGetGPS   = (Button)   findViewById(R.id.btnGetGPS);
-        btnSend     = (Button)   findViewById(R.id.btnSend);
-        lblGPSLoc   = (TextView) findViewById(R.id.lblGPSLoc);
-        txtUserName = (EditText) findViewById(R.id.txtUserName);
+        btnGetGPS      = (Button)   findViewById(R.id.btnGetGPS);
+        btnSend        = (Button)   findViewById(R.id.btnSend);
+        btnLogin       = (Button)   findViewById(R.id.btnLogin);
+        btnAddLocation = (Button)   findViewById(R.id.btnAddLocation);
+        btnRegister    = (Button)   findViewById(R.id.btnRegister);
+
+        lblGPSLoc      = (TextView) findViewById(R.id.lblGPSLoc);
+
+        txtUserName    = (EditText) findViewById(R.id.txtUserName);
 
         final Context context = getApplicationContext();
 
@@ -76,10 +85,50 @@ public class MainActivity extends ActionBarActivity {
 
                 //String username = txtUserName.getText().toString();
 
-                //Toast.makeText(getApplicationContext(), "Submitting Location To Database. For user: " + username, Toast.LENGTH_LONG).show();
+                MessageRestClient mRC = new MessageRestClient(getApplicationContext());
 
-                // MessageRestClient.getMessages(MainActivity.this);
-                MessageRestClient.addMessage(MainActivity.this);
+                mRC.getMessages(MainActivity.this);
+                //mRC.addMessage(MainActivity.this);
+                }
+            }
+        );
+
+        btnLogin.setOnClickListener(
+            new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+
+                Login login = new Login(getApplicationContext());
+
+                login.loginUser();
+
+                }
+            }
+        );
+
+        btnAddLocation.setOnClickListener(
+            new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+
+                MessageRestClient mRC = new MessageRestClient(getApplicationContext());
+
+                //mRC.getMessages(MainActivity.this);
+                mRC.addMessage(MainActivity.this);
+
+                }
+            }
+        );
+
+        btnRegister.setOnClickListener(
+            new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    MainActivity.this.startActivity(myIntent);
                 }
             }
         );

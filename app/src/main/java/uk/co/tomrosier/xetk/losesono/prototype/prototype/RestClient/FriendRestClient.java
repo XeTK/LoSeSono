@@ -3,7 +3,7 @@ package uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient;
 /**
  * Created by xetk on 05/03/15.
  */
-public class FriendRestClient extends RestClient {
+public class FriendRestClient  {
 
     public FriendRestClient() {}
 

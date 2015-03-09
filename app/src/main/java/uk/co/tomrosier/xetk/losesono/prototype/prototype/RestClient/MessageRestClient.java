@@ -1,6 +1,7 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -16,17 +17,21 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestModel.MessageModel;
  */
 public class MessageRestClient {
 
-    public MessageRestClient() {}
+    RestClient restClient;
+
+    public MessageRestClient(Context context) {
+        restClient = new RestClient(context);
+    }
 
     // TODO:
-    public static Object getMessageByID(Integer id) {
+    public Object getMessageByID(Integer id) {
         return null;
     }
 
     // TODO:
-    public static void getMessages(final Activity activity) {
+    public void getMessages(final Activity activity) {
 
-        RestClient.get(
+        restClient.get(
             "messages",
             null,
             new JsonHttpResponseHandler() {
@@ -43,7 +48,7 @@ public class MessageRestClient {
     }
 
     // TODO:
-    public static void addMessage(final Activity activity) {
+    public void addMessage(final Activity activity) {
 
         RequestParams params = new RequestParams();
 
@@ -54,7 +59,7 @@ public class MessageRestClient {
         params.put("latitude", "45.1");
         params.put("range", "10");
 
-        RestClient.post(
+        restClient.post(
                 "message/add",
                 params,
                 new JsonHttpResponseHandler() {

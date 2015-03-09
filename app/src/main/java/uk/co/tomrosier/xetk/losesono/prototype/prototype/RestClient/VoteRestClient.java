@@ -5,7 +5,7 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.VoteType;
 /**
  * Created by xetk on 05/03/15.
  */
-public class VoteRestClient extends RestClient {
+public class VoteRestClient  {
 
     public VoteRestClient() {}
 
