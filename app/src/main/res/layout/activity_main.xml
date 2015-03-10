@@ -20,17 +20,17 @@
         android:id="@+id/lblGPSLoc"
         android:layout_below="@+id/btnGetGPS"
         android:layout_centerHorizontal="true"
-        android:layout_alignBottom="@+id/btnSend" />
+        android:layout_alignBottom="@+id/btnLoadMap" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Location"
-        android:id="@+id/btnSend"
+        android:text="LoadMap"
+        android:id="@+id/btnLoadMap"
         android:layout_above="@+id/btnLoginLA"
-        android:layout_alignLeft="@+id/btnAddLocation"
-        android:layout_alignStart="@+id/btnAddLocation"
-        android:layout_marginBottom="69dp" />
+        android:layout_alignRight="@+id/btnLoginLA"
+        android:layout_alignEnd="@+id/btnLoginLA"
+        android:layout_marginBottom="53dp" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -8,4 +8,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_register">LoginActivity</string>
 
+    <string name="title_activity_maps">Tag a Location</string>
+    <string name="title_activity_navigation">Navigation</string>
 </resources>

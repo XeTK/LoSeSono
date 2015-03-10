@@ -17,7 +17,7 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.services.GPSTracker;
 public class MainActivity extends ActionBarActivity {
 
     Button btnGetGPS;
-    Button btnSend;
+    Button btnLoadMap;
     Button btnLogin;
     Button btnAddLocation;
 
@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         btnGetGPS      = (Button)   findViewById(R.id.btnGetGPS);
-        btnSend        = (Button)   findViewById(R.id.btnSend);
+        btnLoadMap     = (Button)   findViewById(R.id.btnLoadMap);
         btnLogin       = (Button)   findViewById(R.id.btnLoginLA);
         btnAddLocation = (Button)   findViewById(R.id.btnAddLocation);
 
@@ -80,18 +80,19 @@ public class MainActivity extends ActionBarActivity {
         );
 
 
-        btnSend.setOnClickListener(
-            new View.OnClickListener() {
+        btnLoadMap.setOnClickListener(
+                new View.OnClickListener() {
 
-                @Override
-                public void onClick(View arg0) {
-
-                MessageRestClient mRC = new MessageRestClient(getApplicationContext());
-
-                mRC.getMessages(MainActivity.this);
+                    @Override
+                    public void onClick(View arg0) {
+                        Intent myIntent = new Intent(MainActivity.this, NavigationActivity.class);
+                        MainActivity.this.startActivity(myIntent);
+                    }
                 }
-            }
         );
+
+        //MessageRestClient mRC = new MessageRestClient(getApplicationContext());
+        //mRC.getMessages(MainActivity.this);
 
         btnAddLocation.setOnClickListener(
             new View.OnClickListener() {
