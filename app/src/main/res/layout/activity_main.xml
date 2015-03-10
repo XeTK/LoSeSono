@@ -12,18 +12,6 @@
         android:id="@+id/btnGetGPS"
         android:layout_centerHorizontal="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtUserName"
-        android:layout_marginTop="61dp"
-        android:hint="User Name"
-        android:layout_below="@+id/btnGetGPS"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,15 +19,18 @@
         android:text="GPS Location"
         android:id="@+id/lblGPSLoc"
         android:layout_below="@+id/btnGetGPS"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/btnSend" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get Location"
         android:id="@+id/btnSend"
-        android:layout_below="@+id/txtUserName"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/btnLoginLA"
+        android:layout_alignLeft="@+id/btnAddLocation"
+        android:layout_alignStart="@+id/btnAddLocation"
+        android:layout_marginBottom="69dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnLoginLA"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/btnGetGPS"
         android:layout_alignStart="@+id/btnGetGPS" />
@@ -68,14 +59,5 @@
         android:layout_above="@+id/jsonStr"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="43dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/btnRegister"
-        android:layout_above="@+id/btnAddLocation"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp" />
 
 </RelativeLayout>

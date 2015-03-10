@@ -1,4 +1,4 @@
-package uk.co.tomrosier.xetk.losesono.prototype.prototype;
+package uk.co.tomrosier.xetk.losesono.prototype.prototype.services;
 
 import android.app.AlertDialog;
 import android.app.Service;

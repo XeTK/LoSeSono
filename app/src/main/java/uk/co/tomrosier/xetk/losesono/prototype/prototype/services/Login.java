@@ -1,4 +1,4 @@
-package uk.co.tomrosier.xetk.losesono.prototype.prototype;
+package uk.co.tomrosier.xetk.losesono.prototype.prototype.services;
 
 import android.content.Context;
 
@@ -40,13 +40,13 @@ public class Login {
     }
 
 
-    public void loginUser() {
+    public void loginUser(String username, String password, final AjaxCompleteHandler callback ) {
 
         String uri = RestClient.getCompleteURL("login");
 
         System.out.println("Rest Get URL: " + uri);
 
-        client.setBasicAuth("XeTK","password");
+        client.setBasicAuth(username, password);
 
         client.get(
             uri,
@@ -56,14 +56,18 @@ public class Login {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     if (statusCode == 200) {
                         System.out.println("User has been logged in + " + response.toString());
+                        callback.handleAction("Success");
                     } else {
                         System.err.println("Getting Messages failed with status code of " + statusCode);
+                        callback.handleAction("Failed");
                     }
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
-                    System.out.println("Error: " + response.toString());
+                    System.out.println("Error: " + statusCode);
+
+                    callback.handleAction("Failed");
                 }
             }
         );

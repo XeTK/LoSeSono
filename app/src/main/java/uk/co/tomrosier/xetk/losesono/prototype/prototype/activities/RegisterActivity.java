@@ -1,4 +1,4 @@
-package uk.co.tomrosier.xetk.losesono.prototype.prototype;
+package uk.co.tomrosier.xetk.losesono.prototype.prototype.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,10 +15,11 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.json.JSONArray;
 
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.RestClient;
 
 
-public class LoginActivity extends ActionBarActivity {
+public class RegisterActivity extends ActionBarActivity {
 
     EditText txtUserName;
     EditText txtFirstName;
@@ -32,7 +33,7 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
 
 
         txtUserName  = (EditText) findViewById(R.id.txtUserName);
@@ -63,7 +64,7 @@ public class LoginActivity extends ActionBarActivity {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                                 if (statusCode == 200) {
-                                    Toast.makeText(getApplicationContext(), "Registration Complete", Toast.LENGTH_LONG);
+                                    Toast.makeText(getApplicationContext(), "Registration Complete", Toast.LENGTH_LONG).show();
                                     finish();
                                 } else {
                                     System.err.println("Getting Messages failed with status code of " + statusCode);

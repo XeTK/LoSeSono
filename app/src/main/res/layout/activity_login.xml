@@ -4,65 +4,62 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.LoginActivity">
+    tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.LoginActivity">
 
-    <TableRow
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true">
+        android:weightSum="1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtUsernameLA"
+            android:layout_gravity="center_horizontal"
+            android:hint="Username" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/txtPasswordLA"
+            android:layout_gravity="center_horizontal"
+            android:hint="Password" />
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtUserName"
-                android:layout_gravity="center_horizontal"
-                android:hint="User Name" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtFirstName"
-                android:layout_gravity="center_horizontal"
-                android:hint="First Name" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtLastName"
-                android:layout_gravity="center_horizontal"
-                android:hint="Last Name" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/txtEmail"
-                android:layout_gravity="center_horizontal"
-                android:hint="Email" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/txtPassword"
-                android:layout_gravity="center_horizontal"
-                android:hint="Password" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="1">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Register"
-                android:id="@+id/btnRegister"
-                android:layout_gravity="center_horizontal" />
+                android:id="@+id/btnRegisterLA"
+                android:layout_gravity="center_vertical" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.99"
+                android:focusable="false" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:id="@+id/btnLoginLA"
+                android:layout_gravity="center_vertical" />
         </LinearLayout>
-    </TableRow>
+
+    </LinearLayout>
+
 </RelativeLayout>

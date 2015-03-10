@@ -1,6 +1,5 @@
-package uk.co.tomrosier.xetk.losesono.prototype.prototype;
+package uk.co.tomrosier.xetk.losesono.prototype.prototype.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -8,10 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.services.GPSTracker;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -20,11 +20,8 @@ public class MainActivity extends ActionBarActivity {
     Button btnSend;
     Button btnLogin;
     Button btnAddLocation;
-    Button btnRegister;
 
     TextView lblGPSLoc;
-
-    EditText txtUserName;
 
     GPSTracker gps;
 
@@ -35,15 +32,21 @@ public class MainActivity extends ActionBarActivity {
 
         btnGetGPS      = (Button)   findViewById(R.id.btnGetGPS);
         btnSend        = (Button)   findViewById(R.id.btnSend);
-        btnLogin       = (Button)   findViewById(R.id.btnLogin);
+        btnLogin       = (Button)   findViewById(R.id.btnLoginLA);
         btnAddLocation = (Button)   findViewById(R.id.btnAddLocation);
-        btnRegister    = (Button)   findViewById(R.id.btnRegister);
 
         lblGPSLoc      = (TextView) findViewById(R.id.lblGPSLoc);
 
-        txtUserName    = (EditText) findViewById(R.id.txtUserName);
+        btnLogin.setOnClickListener(
+            new View.OnClickListener() {
 
-        final Context context = getApplicationContext();
+                @Override
+                public void onClick(View arg0) {
+                Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                MainActivity.this.startActivity(myIntent);
+                }
+            }
+        );
 
         // Show location button click event
         btnGetGPS.setOnClickListener(
@@ -51,27 +54,27 @@ public class MainActivity extends ActionBarActivity {
 
                 @Override
                 public void onClick(View arg0) {
-                    // Create class object
-                    gps = new GPSTracker(MainActivity.this);
+                // Create class object
+                gps = new GPSTracker(MainActivity.this);
 
-                    // Check if GPS enabled
-                    if(gps.canGetLocation()) {
+                // Check if GPS enabled
+                if(gps.canGetLocation()) {
 
-                        double latitude = gps.getLatitude();
-                        double longitude = gps.getLongitude();
+                    double latitude = gps.getLatitude();
+                    double longitude = gps.getLongitude();
 
-                        // \n is for new line
-                        if (latitude != 0 && longitude != 0) {
-                            lblGPSLoc.setText("Your Location is - \nLat: " + latitude + "\nLong: " + longitude);
-                        } else {
-                            lblGPSLoc.setText("No fix yet");
-                        }
+                    // \n is for new line
+                    if (latitude != 0 && longitude != 0) {
+                        lblGPSLoc.setText("Your Location is - \nLat: " + latitude + "\nLong: " + longitude);
                     } else {
-                        // Can't get location.
-                        // GPS or network is not enabled.
-                        // Ask user to enable GPS/network in settings.
-                        gps.showSettingsAlert();
+                        lblGPSLoc.setText("No fix yet");
                     }
+                } else {
+                    // Can't get location.
+                    // GPS or network is not enabled.
+                    // Ask user to enable GPS/network in settings.
+                    gps.showSettingsAlert();
+                }
                 }
             }
         );
@@ -83,26 +86,9 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View arg0) {
 
-                //String username = txtUserName.getText().toString();
-
                 MessageRestClient mRC = new MessageRestClient(getApplicationContext());
 
                 mRC.getMessages(MainActivity.this);
-                //mRC.addMessage(MainActivity.this);
-                }
-            }
-        );
-
-        btnLogin.setOnClickListener(
-            new View.OnClickListener() {
-
-                @Override
-                public void onClick(View arg0) {
-
-                Login login = new Login(getApplicationContext());
-
-                login.loginUser();
-
                 }
             }
         );
@@ -115,23 +101,11 @@ public class MainActivity extends ActionBarActivity {
 
                 MessageRestClient mRC = new MessageRestClient(getApplicationContext());
 
-                //mRC.getMessages(MainActivity.this);
                 mRC.addMessage(MainActivity.this);
-
                 }
             }
         );
 
-        btnRegister.setOnClickListener(
-            new View.OnClickListener() {
-
-                @Override
-                public void onClick(View arg0) {
-                    Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    MainActivity.this.startActivity(myIntent);
-                }
-            }
-        );
 
     }
 
