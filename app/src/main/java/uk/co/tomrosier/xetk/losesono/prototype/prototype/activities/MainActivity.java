@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
-import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.services.GPSTracker;
 
 
@@ -99,10 +98,11 @@ public class MainActivity extends ActionBarActivity {
 
                 @Override
                 public void onClick(View arg0) {
+                    Intent myIntent = new Intent(MainActivity.this, PostMessageAcvitiy.class);
+                    MainActivity.this.startActivity(myIntent);
+                //MessageRestClient mRC = new MessageRestClient(getApplicationContext());
 
-                MessageRestClient mRC = new MessageRestClient(getApplicationContext());
-
-                mRC.addMessage(MainActivity.this);
+                //mRC.addMessage(MainActivity.this);
                 }
             }
         );

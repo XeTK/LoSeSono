@@ -6,30 +6,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.services.HandleGPS;
 
-public class NavigationActivity extends ActionBarActivity {
+public class PostMessageAcvitiy extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation);
-
+        setContentView(R.layout.activity_post_message_acvitiy);
         setUpMapIfNeeded();
     }
-
+//messageMapFragment
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_navigation, menu);
+        getMenuInflater().inflate(R.menu.menu_post_message_acvitiy, menu);
         return true;
     }
 
@@ -48,59 +49,55 @@ public class NavigationActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link com.google.android.gms.maps.SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(android.os.Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
     private void setUpMapIfNeeded() {
 
 
-            // Try to obtain the map from the SupportMapFragment.
+        // Try to obtain the map from the SupportMapFragment.
 
 //            SupportMapFragment gmap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragementHolder));
 
-            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapsfragment);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.messageMapFragment);
 
-            mapFragment.getMapAsync(
+        mapFragment.getMapAsync(
                 new OnMapReadyCallback() {
 
                     @Override
                     public void onMapReady(GoogleMap googleMap) {
-                        Toast.makeText(getApplicationContext(),"Map Ready", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Map Ready", Toast.LENGTH_LONG).show();
+
                         setUpMap(googleMap);
                     }
                 }
-            );
+        );
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap(GoogleMap mMap) {
 
-        HandleGPS gps = new HandleGPS(NavigationActivity.this);
+        HandleGPS gps = new HandleGPS(PostMessageAcvitiy.this);
 
         double lat = gps.getLatitude();
         double lon = gps.getLongitude();
 
         boolean validGPSFix = gps.isValidGPS();
 
-        //if (validGPSFix)
-            mMap.addMarker(new MarkerOptions().position(new LatLng(54.0,52.0)).title("Marker"));
+        if (validGPSFix) {
+            LatLng location = new LatLng(lat, lon);
+
+
+            MarkerOptions markerOpts = new MarkerOptions();
+            markerOpts.position(location);
+            markerOpts.title("Add a tag to this location.");
+            markerOpts.visible(true);
+
+
+            Marker marker = mMap.addMarker(markerOpts);
+            marker.showInfoWindow();
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
+
+            mMap.getUiSettings().setScrollGesturesEnabled(false);
+            mMap.getUiSettings().setZoomGesturesEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
+        }
     }
 }
