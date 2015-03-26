@@ -9,20 +9,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.Constants;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
-import uk.co.tomrosier.xetk.losesono.prototype.prototype.services.GPSTracker;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.services.DiscoverService;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.GPSTracker;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.Login;
 
 
 public class MainActivity extends ActionBarActivity {
 
     Button btnGetGPS;
     Button btnLoadMap;
-    Button btnLogin;
     Button btnAddLocation;
 
     TextView lblGPSLoc;
+    TextView lblURL;
 
     GPSTracker gps;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,21 +35,15 @@ public class MainActivity extends ActionBarActivity {
 
         btnGetGPS      = (Button)   findViewById(R.id.btnGetGPS);
         btnLoadMap     = (Button)   findViewById(R.id.btnLoadMap);
-        btnLogin       = (Button)   findViewById(R.id.btnLoginLA);
         btnAddLocation = (Button)   findViewById(R.id.btnAddLocation);
 
         lblGPSLoc      = (TextView) findViewById(R.id.lblGPSLoc);
+        lblURL         = (TextView) findViewById(R.id.lblURL);
 
-        btnLogin.setOnClickListener(
-            new View.OnClickListener() {
+        lblURL.setText(Constants.BASE_URL);
 
-                @Override
-                public void onClick(View arg0) {
-                Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
-                MainActivity.this.startActivity(myIntent);
-                }
-            }
-        );
+        Intent service = new Intent(this, DiscoverService.class);
+        startService(service);
 
         // Show location button click event
         btnGetGPS.setOnClickListener(
@@ -100,15 +98,14 @@ public class MainActivity extends ActionBarActivity {
                 public void onClick(View arg0) {
                     Intent myIntent = new Intent(MainActivity.this, PostMessageAcvitiy.class);
                     MainActivity.this.startActivity(myIntent);
-                //MessageRestClient mRC = new MessageRestClient(getApplicationContext());
-
-                //mRC.addMessage(MainActivity.this);
                 }
             }
         );
 
-
+        new Login(this).autoLogin();
     }
+
+
 
 
     @Override
@@ -124,6 +121,11 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == R.id.action_login) {
+            Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

@@ -1,4 +1,4 @@
-package uk.co.tomrosier.xetk.losesono.prototype.prototype.services;
+package uk.co.tomrosier.xetk.losesono.prototype.prototype.utils;
 
 import org.apache.http.conn.ssl.SSLSocketFactory;
 

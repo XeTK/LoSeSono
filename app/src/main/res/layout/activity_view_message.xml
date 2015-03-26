@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.PostMessageAcvitiy">
+    tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.ViewMessage">
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,7 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     android:name="com.google.android.gms.maps.MapFragment"
-                    android:id="@+id/messageMapFragment"
+                    android:id="@+id/vMsgMapFragment"
                     android:layout_gravity="center|left|right|top"
                     android:layout_weight="0.60"/>
             </FrameLayout>
@@ -36,22 +36,14 @@
                 android:layout_height="270dp"
                 android:orientation="vertical">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMessage"
-                    android:hint="Message"
-                    android:layout_gravity="center_horizontal|top" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Post Tag"
-                    android:id="@+id/btnPostTag"
+                <ListView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/vMsgComments"
                     android:layout_gravity="center" />
-
             </FrameLayout>
 
         </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>

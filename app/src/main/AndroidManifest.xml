@@ -8,16 +8,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <!--
-     To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
-     option is required to comply with the Google+ Sign-In developer policies
-    -->
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" /> <!-- To retrieve the account name (email) as part of sign-in: -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +22,17 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <receiver android:name=".services.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.DiscoverService"
+            android:exported="false" />
 
         <activity
             android:name=".activities.MainActivity"
@@ -47,7 +50,7 @@
 
         <activity
             android:name=".activities.RegisterActivity"
-            android:label="@string/title_activity_login_" >
+            android:label="@string/title_activity_register" >
         </activity>
         <activity
             android:name=".activities.LoginActivity"
@@ -60,6 +63,18 @@
         <activity
             android:name=".activities.PostMessageAcvitiy"
             android:label="@string/title_activity_post_message_acvitiy" >
+        </activity>
+        <activity
+            android:name=".activities.AddFriendActivity"
+            android:label="@string/title_activity_add_friend" >
+        </activity>
+        <activity
+            android:name=".activities.MessageFriendsActivity"
+            android:label="@string/title_activity_message_friends" >
+        </activity>
+        <activity
+            android:name=".activities.ViewMessage"
+            android:label="@string/title_activity_view_message" >
         </activity>
     </application>
 

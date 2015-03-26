@@ -27,17 +27,15 @@
         android:layout_height="wrap_content"
         android:text="LoadMap"
         android:id="@+id/btnLoadMap"
-        android:layout_above="@+id/btnLoginLA"
-        android:layout_alignRight="@+id/btnLoginLA"
-        android:layout_alignEnd="@+id/btnLoginLA"
-        android:layout_marginBottom="53dp" />
+        android:layout_marginBottom="53dp"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
-        android:id="@+id/jsonStr"
+        android:id="@+id/lblURL"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -45,19 +43,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/btnLoginLA"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/btnGetGPS"
-        android:layout_alignStart="@+id/btnGetGPS" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Add Location"
         android:id="@+id/btnAddLocation"
-        android:layout_above="@+id/jsonStr"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="43dp" />
+        android:layout_alignLeft="@+id/lblGPSLoc"
+        android:layout_alignStart="@+id/lblGPSLoc"
+        android:layout_marginTop="52dp"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

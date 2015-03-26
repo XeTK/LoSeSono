@@ -1,14 +1,15 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype.RestModel;
 
 import android.app.Activity;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Intent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.MessageFriendsActivity;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Message;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
 
 /**
  * Created by xetk on 06/03/15.
@@ -16,7 +17,7 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 public class MessageModel {
 
 
-    public static void processMessages(JSONArray response, Activity activity) {
+    public static void processMessages(JSONArray response, final AjaxCompleteHandler handler) {
 
         try {
 
@@ -24,19 +25,9 @@ public class MessageModel {
 
                 JSONObject obj = response.getJSONObject(i);
 
-                String res = obj.toString();
+                Message msg = new Message(obj);
 
-                System.out.println(res);
-
-                TextView lblJSON = (TextView) activity.findViewById(R.id.jsonStr);
-
-                String msg = "Content: " + obj.getString("content")
-                        + "\nLongitude: " + obj.getDouble("longitude")
-                        + "\nLatitude: " + obj.getDouble("latitude");
-
-                lblJSON.setText(msg);
-
-                Toast.makeText(activity.getApplicationContext(), res, Toast.LENGTH_LONG).show();
+                handler.handleAction(msg);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -45,7 +36,18 @@ public class MessageModel {
 
     public static void addMessage(JSONObject response, Activity activity) {
 
-        Toast.makeText(activity.getApplicationContext(), response.toString(),Toast.LENGTH_LONG).show();
+        try {
+
+            Intent myIntent = new Intent(activity, MessageFriendsActivity.class);
+            myIntent.putExtra("Message_ID", response.getInt("message_id"));
+            activity.startActivity(myIntent);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        //Toast.makeText(activity.getApplicationContext(), response.toString(),Toast.LENGTH_LONG).show();
     }
 
 }
