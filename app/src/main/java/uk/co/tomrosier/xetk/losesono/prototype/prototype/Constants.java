@@ -7,5 +7,6 @@ public class Constants {
     //public static final String BASE_URL = "https://xetk.co.uk:3000";
     //public static final String BASE_URL = "https://csclp0132.csc.aber.ac.uk:3000";
     //public static final String BASE_URL = "https://192.168.1.224:3000";
-    public static final String BASE_URL = "https://192.168.0.10:3000";
+    //public static final String BASE_URL = "https://192.168.0.10:3000";
+    public static final String BASE_URL = "https://192.168.1.146:3000";
 }

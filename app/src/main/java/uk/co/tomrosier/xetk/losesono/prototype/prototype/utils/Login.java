@@ -11,12 +11,14 @@ import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.PersistentCookieStore;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.KeyStore;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.RestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.LoginActivity;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.User;
 
 /**
  * Created by xetk on 09/03/15.
@@ -26,6 +28,8 @@ public class Login {
     private AsyncHttpClient client = new AsyncHttpClient();
 
     private Context applicationContext;
+
+    public static User user;
 
     public Login(Context context) {
         this.applicationContext = context;
@@ -65,6 +69,13 @@ public class Login {
                         if (statusCode == 200) {
                             System.out.println("User has been logged in + " + response.toString());
                             callback.handleAction("Success");
+
+                            try {
+                                user = new User(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                         } else {
                             System.err.println("Getting Messages failed with status code of " + statusCode);
                             callback.handleAction("Failed");

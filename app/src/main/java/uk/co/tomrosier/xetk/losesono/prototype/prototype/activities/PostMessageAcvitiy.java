@@ -99,7 +99,7 @@ public class PostMessageAcvitiy extends ActionBarActivity {
             Marker marker = mMap.addMarker(markerOpts);
             marker.showInfoWindow();
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
 
             mMap.getUiSettings().setScrollGesturesEnabled(false);
             mMap.getUiSettings().setZoomGesturesEnabled(false);

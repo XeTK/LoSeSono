@@ -1,6 +1,7 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,7 +11,10 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
@@ -19,6 +23,8 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandl
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.HandleGPS;
 
 public class NavigationActivity extends Activity {
+
+    private HashMap<Marker, Message> allMarkersMap = new HashMap<Marker, Message>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,27 @@ public class NavigationActivity extends Activity {
                     googleMap.getUiSettings().setMapToolbarEnabled(false);
                     googleMap.getUiSettings().setCompassEnabled(false);
                     googleMap.getUiSettings().setRotateGesturesEnabled(false);
+
+                    googleMap.setOnMarkerClickListener(
+                        new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker) {
+
+                                marker.showInfoWindow();
+
+                                Intent intent = new Intent(getApplicationContext(), ViewMessage.class);
+
+                                Message msg = allMarkersMap.get(marker);
+
+                                if (msg != null) {
+                                    intent.putExtra("MsgObj", msg.getMessageID());
+
+                                    startActivity(intent);
+                                }
+                                return true;
+                            }
+                        }
+                    );
 
                     setUpMap(googleMap);
                 }
@@ -86,10 +113,15 @@ public class NavigationActivity extends Activity {
                     mo.position(new LatLng(msg.getLatitude(),msg.getLongitude()));
                     mo.title(msg.getContent());
                     mo.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                    mMap.addMarker(mo);
+
+                    Marker marker = mMap.addMarker(mo);
+
+                    allMarkersMap.put(marker, msg);
+
                 }
             }
         );
 
     }
+
 }
