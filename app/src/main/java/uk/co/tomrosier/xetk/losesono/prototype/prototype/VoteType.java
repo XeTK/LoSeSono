@@ -1,9 +1,9 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype;
 
 /**
- * Created by xetk on 05/03/15.
+ * Theses are the different types of votes we can have. either for a message or a comment.
  */
 public enum VoteType{
     message,
-    vote;
+    comment;
 }
