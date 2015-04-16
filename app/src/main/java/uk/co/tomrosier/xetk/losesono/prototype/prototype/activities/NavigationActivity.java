@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -70,10 +69,6 @@ public class NavigationActivity extends ActionBarActivity {
 
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
-                    Toast.makeText(getApplicationContext(),"Map Ready", Toast.LENGTH_LONG).show();
-
-                    //googleMap.getUiSettings().setScrollGesturesEnabled(false);
-                    //googleMap.getUiSettings().setZoomGesturesEnabled(false);
 
                     googleMap.getUiSettings().setMapToolbarEnabled(false);
                     googleMap.getUiSettings().setCompassEnabled(false);

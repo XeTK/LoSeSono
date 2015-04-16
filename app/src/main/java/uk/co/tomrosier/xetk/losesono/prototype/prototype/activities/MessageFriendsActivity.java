@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,58 +18,78 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestC
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Friend;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
 
+/**
+ * This is the activity for adding the visability to friends for a given message.
+ */
+
 public class MessageFriendsActivity extends ActionBarActivity {
 
-    ArrayList<Friend> listItems=new ArrayList<Friend>();
+    // List of the items shown on the screen.
+    private ArrayList<Friend> listItems=new ArrayList<Friend>();
 
-    FriendArrayAdapter adapter;
+    /// This is the adapter that shows the listview on the screen.
+    private FriendArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_friends);
 
+        // Get the list view from the layout so we can add items to it.
         ListView lw = (ListView) findViewById(R.id.ListViewFriends);
 
+        // Setup the display adapter to add the items to.
         adapter = new FriendArrayAdapter(this, listItems);
 
+        // Set the view point for the listview.
         lw.setAdapter(adapter);
 
+        // Get the bundle from the intent.
         Bundle extras = getIntent().getExtras();
 
+        // Check the extras see if we have any.
         if (extras != null) {
-            final int messageID = extras.getInt("Message_ID");
-            Toast.makeText(getApplicationContext(), "Message_id: " + messageID, Toast.LENGTH_LONG).show();
 
+            // Get the message_id that has been passed to the activity.
+            final int messageID = extras.getInt("Message_ID");
+
+            // Get the restclient for dealing with friends.
             FriendRestClient fRC = new FriendRestClient(this);
 
+            // Get the list of friends from the server.
             fRC.getFriends(
                 new AjaxCompleteHandler() {
                     @Override
                     public void handleAction(Object someData) {
+                        // What we do with each friends in the list.
                         Friend user = (Friend)someData;
+
+                        // Add each friend to the list.
                         listItems.add(user);
+                        // Show the data has been changed once we added.
                         adapter.notifyDataSetChanged();
                     }
                 }
             );
 
+            // Get the button for submitting the data.
             Button BtnSelectFriends = (Button) findViewById(R.id.BtnSelectFriends);
 
+            // Process the selected friends on the button press.
             BtnSelectFriends.setOnClickListener(
                     new View.OnClickListener() {
 
                         @Override
                         public void onClick(View arg0) {
+                            // For each of the friends, in the list view.
                             for (int i = 0; i < adapter.getCount(); i++) {
+                                // Get the friend object from the adapter view.
                                 Friend fi = adapter.getItem(i);
 
-                                String help = fi.getUser().getUserNmae() + " " + fi.isChecked();
-
-                                Toast.makeText(getApplicationContext(), help, Toast.LENGTH_LONG).show();
-
+                                // Get the message rest client ready to append the friend to the message.
                                 MessageRestClient mRC = new MessageRestClient(getApplicationContext());
 
+                                // Add the user to the message.
                                 mRC.addUser(
                                     new AjaxCompleteHandler() {
                                         @Override
@@ -83,28 +102,18 @@ public class MessageFriendsActivity extends ActionBarActivity {
                                     fi.getLinkID()
                                 );
 
+                                // Close the activity.
                                 finish();
+                                // Go back to the home activity.
                                 Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                                 startActivity(intent);
                             }
-
                         }
                     }
             );
-
         }
-
-
     }
-/*
-    @Override
-    public void onBackPressed() {
 
-        finish();
-        Intent intent = new Intent(this, NavigationActivity.class);
-        startActivity(intent);
-    }
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -122,6 +131,7 @@ public class MessageFriendsActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_friend) {
 
+            // Show the dialog for adding a new friends.
             Intent myIntent = new Intent(MessageFriendsActivity.this, AddFriendActivity.class);
             MessageFriendsActivity.this.startActivity(myIntent);
 
