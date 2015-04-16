@@ -37,7 +37,7 @@ public class MessageModel {
     public static void addMessage(JSONObject response, Activity activity) {
 
         try {
-
+            activity.finish();
             Intent myIntent = new Intent(activity, MessageFriendsActivity.class);
             myIntent.putExtra("Message_ID", response.getInt("message_id"));
             activity.startActivity(myIntent);

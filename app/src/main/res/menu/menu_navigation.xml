@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.NavigationActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+    <item android:id="@+id/action_refresh" android:title="Refresh"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_login" android:title="@string/action_login"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_post_message" android:title="Post a tag"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/add_friend" android:title="Add Friend"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

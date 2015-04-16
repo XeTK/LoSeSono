@@ -33,14 +33,91 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
+                android:layout_height="277dp"
                 android:orientation="vertical">
 
-                <ListView
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:id="@+id/vMsgComments"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center">
+
+                    <GridLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:rowCount="6"
+                        android:columnCount="6">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Text"
+                            android:id="@+id/textView"
+                            android:layout_row="4"
+                            android:layout_column="0" />
+
+                        <ImageButton
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ibTest1"
+                            android:layout_centerHorizontal="true"
+                            android:adjustViewBounds="true"
+                            android:cropToPadding="false"
+                            android:layout_below="@+id/hlTopBar"
+                            android:background="#00000000"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/thumbs_up"
+                            android:layout_row="4"
+                            android:layout_column="1" />
+
+                        <ImageButton
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/ibTest"
+                            android:layout_centerHorizontal="true"
+                            android:adjustViewBounds="true"
+                            android:cropToPadding="false"
+                            android:layout_below="@+id/hlTopBar"
+                            android:background="#00000000"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/thumbs_down"
+                            android:layout_row="4"
+                            android:layout_column="4"
+                            android:layout_gravity="right" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Text"
+                            android:id="@+id/textView2"
+                            android:layout_row="4"
+                            android:layout_column="5" />
+                    </GridLayout>
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:id="@+id/listView"
+                        android:layout_gravity="center_vertical" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:layout_width="289dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/editText"
+                            android:layout_gravity="left|center_vertical" />
+
+                        <Button
+                            android:layout_width="85dp"
+                            android:layout_height="fill_parent"
+                            android:text="New Button"
+                            android:id="@+id/button"
+                            android:layout_gravity="right|center_vertical" />
+                    </FrameLayout>
+                </LinearLayout>
             </FrameLayout>
 
         </LinearLayout>

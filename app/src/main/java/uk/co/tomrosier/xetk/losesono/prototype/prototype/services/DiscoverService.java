@@ -34,7 +34,9 @@ public class DiscoverService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        //android.os.Debug.waitForDebugger();
+
+        // android.os.Debug.waitForDebugger();
+
     }
 
     @Override

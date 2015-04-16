@@ -84,6 +84,8 @@ public class MessageFriendsActivity extends ActionBarActivity {
                                 );
 
                                 finish();
+                                Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                                startActivity(intent);
                             }
 
                         }
@@ -94,7 +96,15 @@ public class MessageFriendsActivity extends ActionBarActivity {
 
 
     }
+/*
+    @Override
+    public void onBackPressed() {
 
+        finish();
+        Intent intent = new Intent(this, NavigationActivity.class);
+        startActivity(intent);
+    }
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

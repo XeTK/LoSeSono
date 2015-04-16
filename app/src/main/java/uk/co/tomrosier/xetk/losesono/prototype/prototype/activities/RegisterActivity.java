@@ -50,11 +50,11 @@ public class RegisterActivity extends ActionBarActivity {
                 public void onClick(View arg0) {
                     RequestParams params = new RequestParams();
 
-                    params.put("firstname", txtFirstName.getText().toString());
-                    params.put("lastname", txtLastName.getText().toString());
-                    params.put("username", txtUserName.getText().toString());
-                    params.put("email", txtEmail.getText().toString());
-                    params.put("password", txtPassword.getText().toString());
+                    params.put("firstname", txtFirstName.getText().toString().trim());
+                    params.put("lastname", txtLastName.getText().toString().trim());
+                    params.put("username", txtUserName.getText().toString().trim());
+                    params.put("email", txtEmail.getText().toString().trim());
+                    params.put("password", txtPassword.getText().toString().trim());
 
                     RestClient restClient = new RestClient();
 

@@ -1,18 +1,16 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype.services;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.UserRestClient;
-import uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.MainActivity;
-import uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.ViewMessage;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.NotificationActivity;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Message;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.User;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
@@ -25,8 +23,13 @@ public class GPSService {
 
     Context context;
 
+    NotificationManager notifyMgr;
+
+
     public GPSService(Context context) {
         this.context = context;
+
+        notifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     public void checkForChange() {
@@ -56,7 +59,7 @@ public class GPSService {
 
         MessageRestClient mRC = new MessageRestClient(context);
 
-        mRC.getMessages(
+        mRC.getMessagesForNotifications(
                 new AjaxCompleteHandler() {
                     @Override
                     public void handleAction(Object someData) {
@@ -118,37 +121,28 @@ public class GPSService {
 
         System.out.println("Creating notification");
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
 
-        mBuilder.setSmallIcon(R.drawable.ic_launcher); // Change ICON.
+        int msgID = msg.getMessageID();
 
-        mBuilder.setContentTitle("Tag nearby");
+        PendingIntent dismissIntent = NotificationActivity.getDismissIntent(msgID, context);
+        PendingIntent realIntent    = NotificationActivity.getRealIntent(msgID,    context);
 
         String msgStr = msg.getContent() + " - " + user.getFirstName() + " " + user.getLastName();
 
-        mBuilder.setContentText(msgStr);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+
+        builder .setDefaults(Notification.DEFAULT_ALL) // also requires VIBRATE permission
+                .setSmallIcon(R.drawable.icon) // Required!
+                .setContentTitle("Tag nearby")
+                .setContentText(msgStr)
+                .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
+                .addAction(0, "View Tag", realIntent)
+                .addAction(0, "Dismiss Tag", dismissIntent);
+
+        // Builds the notification and issues it.
+        notifyMgr.notify(msgID, builder.build());
 
 
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(context, ViewMessage.class);
-
-        resultIntent.putExtra("MsgObj", msg.getMessageID());
-
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-
-        stackBuilder.addParentStack(MainActivity.class);
-
-        stackBuilder.addNextIntent(resultIntent);
-
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        mBuilder.setContentIntent(resultPendingIntent);
-
-
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        mNotificationManager.notify(msg.getMessageID(), mBuilder.build());
     }
 }

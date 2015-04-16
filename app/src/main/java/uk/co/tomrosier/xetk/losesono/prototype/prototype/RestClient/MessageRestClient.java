@@ -56,10 +56,10 @@ public class MessageRestClient {
         );
     }
 
-    public void getMessages(final AjaxCompleteHandler handler) {
+    public void getMessagesForUser(final AjaxCompleteHandler handler) {
 
         restClient.get(
-            "messages",
+            "messages/user",
             null,
             new JsonHttpResponseHandler() {
                 @Override
@@ -71,6 +71,42 @@ public class MessageRestClient {
                     }
                 }
             }
+        );
+    }
+
+    public void getMessagesForFriends(final AjaxCompleteHandler handler) {
+
+        restClient.get(
+                "messages/friends",
+                null,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        if (statusCode == 200) {
+                            MessageModel.processMessages(response, handler);
+                        } else {
+                            System.err.println("Getting Messages failed with status code of " + statusCode);
+                        }
+                    }
+                }
+        );
+    }
+
+    public void getMessagesForNotifications(final AjaxCompleteHandler handler) {
+
+        restClient.get(
+                "messages/notifications",
+                null,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        if (statusCode == 200) {
+                            MessageModel.processMessages(response, handler);
+                        } else {
+                            System.err.println("Getting Messages failed with status code of " + statusCode);
+                        }
+                    }
+                }
         );
     }
 
@@ -110,6 +146,33 @@ public class MessageRestClient {
 
         restClient.post(
                 "message/add/user",
+                params,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (statusCode == 200) {
+                            try {
+                                handler.handleAction(response.getInt("group_id"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            System.err.println("Getting Messages failed with status code of " + statusCode);
+                        }
+                    }
+                }
+        );
+    }
+
+    public void addMessageRead(int messageID, final AjaxCompleteHandler handler) {
+
+        RequestParams params = new RequestParams();
+
+        params.put("message_id", messageID);
+
+
+        restClient.post(
+                "message/read",
                 params,
                 new JsonHttpResponseHandler() {
                     @Override

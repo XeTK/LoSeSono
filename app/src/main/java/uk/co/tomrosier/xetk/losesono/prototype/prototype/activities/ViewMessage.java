@@ -1,5 +1,6 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype.activities;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.UserRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Message;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.User;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
@@ -28,6 +30,10 @@ public class ViewMessage extends ActionBarActivity {
 
     private Message message;
 
+    private Menu menu;
+
+    private boolean isEditable = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +43,13 @@ public class ViewMessage extends ActionBarActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        int msgID = extras.getInt("MsgObj");
+        final int msgID = extras.getInt("MsgObj");
 
-        MessageRestClient mRC = new MessageRestClient(this);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        manager.cancel(msgID);
+
+        final MessageRestClient mRC = new MessageRestClient(this);
 
         mRC.getMessageByID(
             msgID,
@@ -51,9 +61,36 @@ public class ViewMessage extends ActionBarActivity {
 
                     if (msg != null && user != null) {
                         if (msg.getUserID() != user.getUserID()) {
-                            MenuItem item = (MenuItem) findViewById(R.id.audience);
-                            item.setVisible(false);
+                            isEditable = false;
+                            menu.findItem(R.id.audience).setVisible(isEditable);
                             invalidateOptionsMenu();
+
+                            UserRestClient uRC = new UserRestClient(getApplicationContext());
+
+                            uRC.getUserByID(
+                                msg.getUserID(),
+                                new AjaxCompleteHandler() {
+                                    @Override
+                                    public void handleAction(Object someData) {
+                                        User user = (User)someData;
+
+                                        setTitle(user.getFirstName() + " " + user.getLastName() + " has tagged");
+
+                                    }
+                                }
+                            );
+
+                            mRC.addMessageRead(
+                                    msgID,
+                                    new AjaxCompleteHandler() {
+                                        @Override
+                                        public void handleAction(Object someData) {
+                                            Toast.makeText(getApplicationContext(), "Marking message " + msgID + " as Read!", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                            );
+                        } else {
+                            setTitle("I have tagged");
                         }
 
                         setUpMapIfNeeded(msg);
@@ -63,8 +100,8 @@ public class ViewMessage extends ActionBarActivity {
         );
 
 
-
     }
+
 
     private void setUpMapIfNeeded(final Message msg) {
 
@@ -112,9 +149,21 @@ public class ViewMessage extends ActionBarActivity {
     }
 
     @Override
+    public void onBackPressed() {
+
+        finish();
+        Intent intent = new Intent(this, NavigationActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        this.menu = menu;
+
         getMenuInflater().inflate(R.menu.menu_view_message, menu);
+        menu.findItem(R.id.audience).setVisible(isEditable);
+
         return true;
     }
 
