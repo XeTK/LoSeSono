@@ -3,7 +3,6 @@ package uk.co.tomrosier.xetk.losesono.prototype.prototype.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -117,8 +116,6 @@ public class Login {
                                 String text = (String)someData;
 
                                 if (text.equals("Success")) {
-
-                                    Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show();
 
                                     if (handler != null)
                                         handler.handleAction("Success");
