@@ -26,10 +26,17 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandl
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.HandleGPS;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.Login;
 
+/**
+ * This is the main activity for the application and what the application lands on when it is launched.
+ * It shows a list of all the tags around the current user and makes them easy to access.
+ */
+
 public class NavigationActivity extends ActionBarActivity {
 
+    // Keep a list of all the markers that have been added to the map.
     private HashMap<Marker, Message> allMarkersMap = new HashMap<Marker, Message>();
 
+    // This marker is the location that the current user is in. It is distinct compared to the other markers on the map.
     private Marker myLocation;
 
     @Override
@@ -38,28 +45,49 @@ public class NavigationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        // Load up the background service that checks for the location updates and notifys the user if they are near to a notification.
         Intent service = new Intent(this, DiscoverService.class);
         startService(service);
 
-        new Login(this).autoLogin();
+        // Make sure that the user is logged in to the application and load up the dialog if needed.
+        new Login(this).autoLogin(
+            new AjaxCompleteHandler() {
+                @Override
+                public void handleAction(Object someData) {
+                    String status = (String) someData;
 
-        setUpMapIfNeeded();
+                    if (status.equals("Success")) {
+                        setUpMapIfNeeded();
+                    }
+                }
+            }
+        );
     }
 
+    // When the session resumes reload the map if its not right.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         setUpMapIfNeeded();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setUpMapIfNeeded();
+    }
+
+    // This sets up the map correctly with the info that is needed.
     private void setUpMapIfNeeded() {
 
-        //allMarkersMap = new HashMap<Marker, Message>();
+        // Grab the stored authenticated user that we then can work with.
+        User user = Login.user;
 
+        // This gets the google maps fragment for us to work with.
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapsfragment);
 
+        // Create a new instance of the object with all of the items cleared from it.
         mapFragment.newInstance();
 
-        User user = Login.user;
 
         if (user != null)
             setTitle(user.getFirstName() + " " + user.getLastName() + "'s Tags");

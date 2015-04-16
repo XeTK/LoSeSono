@@ -68,7 +68,7 @@ public class Login {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         if (statusCode == 200) {
                             System.out.println("User has been logged in + " + response.toString());
-                            callback.handleAction("Success");
+
 
                             try {
                                 user = new User(response);
@@ -76,6 +76,7 @@ public class Login {
                                 e.printStackTrace();
                             }
 
+                            callback.handleAction("Success");
                         } else {
                             System.err.println("Getting Messages failed with status code of " + statusCode);
                             callback.handleAction("Failed");
@@ -92,7 +93,7 @@ public class Login {
         );
 
     }
-    public void autoLogin() {
+    public void autoLogin(final AjaxCompleteHandler handler) {
 
         final Context context = applicationContext;
 
@@ -116,10 +117,18 @@ public class Login {
                                 String text = (String)someData;
 
                                 if (text.equals("Success")) {
+
                                     Toast.makeText(context, "Login successful!", Toast.LENGTH_LONG).show();
+
+                                    if (handler != null)
+                                        handler.handleAction("Success");
+
                                 } else {
                                     Intent myIntent = new Intent(context, LoginActivity.class);
                                     context.startActivity(myIntent);
+
+                                    if (handler != null)
+                                        handler.handleAction("Failed");
                                 }
                             }
                         }
@@ -130,6 +139,9 @@ public class Login {
             Intent myIntent = new Intent(context, LoginActivity.class);
             context.startActivity(myIntent);
         }
+    }
 
+    public void autoLogin() {
+        autoLogin(null);
     }
 }
