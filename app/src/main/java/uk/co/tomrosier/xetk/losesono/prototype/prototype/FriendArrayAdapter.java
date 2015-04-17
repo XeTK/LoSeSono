@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Friend;
 
 /**
- * Created by xetk on 28/03/15.
+ * This is for the listview on the adding friends to a message page.
  */
 public class FriendArrayAdapter extends ArrayAdapter<Friend> {
 
+    // Keep track of the friends that our shown on the page.
     private ArrayList<Friend> friendList = new ArrayList<Friend>();
 
+    // When we instantiate the listview we want to get everything ready, for action.
     public FriendArrayAdapter(Context context, ArrayList<Friend> friends) {
         super(context, 0, friends);
         this.friendList = new ArrayList<Friend>();
@@ -39,6 +41,7 @@ public class FriendArrayAdapter extends ArrayAdapter<Friend> {
         TextView friendName = (TextView) convertView.findViewById(R.id.friendName);
         CheckBox friendCB   = (CheckBox) convertView.findViewById(R.id.friendCB);
 
+        // String that is displayed.
         String name = "(" + user.getUser().getUserNmae() + ") " + user.getUser().getFirstName() + " " + user.getUser().getLastName();
 
 
@@ -46,6 +49,7 @@ public class FriendArrayAdapter extends ArrayAdapter<Friend> {
         friendName.setText(name);
         friendCB.setChecked(false);
 
+        // Register the onClick. To check the box.
         friendCB.setOnClickListener(
             new View.OnClickListener() {
                 @Override
@@ -59,6 +63,7 @@ public class FriendArrayAdapter extends ArrayAdapter<Friend> {
         return convertView;
     }
 
+    // This gets the id for a given item.
     @Override
     public long getItemId(int position) {
         Friend user = getItem(position);
