@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import uk.co.tomrosier.xetk.losesono.prototype.prototype.FriendArrayAdapter;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.ArrayAdapters.FriendArrayAdapter;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.FriendRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
@@ -19,13 +19,13 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Friend;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
 
 /**
- * This is the activity for adding the visability to friends for a given message.
+ * This is the activity for adding the visibility to friends for a given message.
  */
 
 public class MessageFriendsActivity extends ActionBarActivity {
 
     // List of the items shown on the screen.
-    private ArrayList<Friend> listItems=new ArrayList<Friend>();
+    private ArrayList<Friend> listItems = new ArrayList<Friend>();
 
     /// This is the adapter that shows the listview on the screen.
     private FriendArrayAdapter adapter;

@@ -17,14 +17,14 @@ public class User {
     // The names for the user.
     private String firstName;
     private String lastName;
-    private String userNmae;
+    private String userName;
 
     // Convert the JSONObject into a Java User Object.
     public User(JSONObject obj) throws JSONException {
         this.userID    = obj.getInt("user_id");
         this.firstName = obj.getString("first_name");
         this.lastName  = obj.getString("last_name");
-        this.userNmae  = obj.getString("username");
+        this.userName  = obj.getString("username");
     }
 
     // Getter for the fields within the class.
@@ -42,6 +42,6 @@ public class User {
     }
 
     public String getUserNmae() {
-        return userNmae;
+        return userName;
     }
 }

@@ -97,7 +97,7 @@
                     <ListView
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
-                        android:id="@+id/listView"
+                        android:id="@+id/VMCommentList"
                         android:layout_gravity="center_vertical" />
 
                     <FrameLayout
@@ -107,14 +107,14 @@
                         <EditText
                             android:layout_width="289dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/editText"
+                            android:id="@+id/VMCommentText"
                             android:layout_gravity="left|center_vertical" />
 
                         <Button
                             android:layout_width="85dp"
                             android:layout_height="fill_parent"
                             android:text="New Button"
-                            android:id="@+id/button"
+                            android:id="@+id/VMBtnComment"
                             android:layout_gravity="right|center_vertical" />
                     </FrameLayout>
                 </LinearLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,9 +17,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.ArrayAdapters.CommentArrayAdapter;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.CommentRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.UserRestClient;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Comment;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Message;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.User;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
@@ -28,6 +34,10 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.Login;
  * This is the activity for viewing the messages and showing where they are on the map.
  */
 public class ViewMessage extends ActionBarActivity {
+
+    private ArrayList<Comment> listItems = new ArrayList<Comment>();
+
+    private CommentArrayAdapter adapter;
 
     // Hold the message ready for it to be used when we need it.
     private Message message;
@@ -43,20 +53,62 @@ public class ViewMessage extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_message);
 
-        // Make sure we are logged into the application.
-        new Login(this).autoLogin();
-
         // Get the extras that have been passed to the activity.
         Bundle extras = getIntent().getExtras();
 
         // Grab the message_id ready for us to use to retrive the message that we need.
         final int msgID = extras.getInt("MsgObj");
 
+
         // Get the notification manager.
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // Cancel the notification for the message if there is a notification for it.
         manager.cancel(msgID);
+
+
+        ListView lw = (ListView) findViewById(R.id.VMCommentList);
+
+        adapter = new CommentArrayAdapter(this, listItems);
+
+        lw.setAdapter(adapter);
+
+        // Get the user rest client ready for us to get data about the users.
+        final UserRestClient uRC = new UserRestClient(getApplicationContext());
+
+        CommentRestClient crc = new CommentRestClient(getApplicationContext());
+
+        crc.getCommentsByID(
+            msgID,
+            new AjaxCompleteHandler() {
+                @Override
+                public void handleAction(Object someData) {
+
+                    final Comment comment = (Comment)someData;
+
+                    System.out.println("Comment_id: " + comment.getCommentID());
+
+                    uRC.getUserByID(
+                        comment.getUserID(),
+                        new AjaxCompleteHandler() {
+                            @Override
+                            public void handleAction(Object someData) {
+                                User user = (User)someData;
+
+                                Comment userComment = comment;
+
+                                userComment.setUser(user);
+
+                                listItems.add(userComment);
+
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    );
+                }
+            }
+        );
+
 
         // Get the message restclient ready to sent our requests.
         final MessageRestClient mRC = new MessageRestClient(this);
@@ -83,9 +135,6 @@ public class ViewMessage extends ActionBarActivity {
                             menu.findItem(R.id.audience).setVisible(isEditable);
                             // Invalidate what we have.
                             invalidateOptionsMenu();
-
-                            // Get the user rest client ready for us to get data about the users.
-                            UserRestClient uRC = new UserRestClient(getApplicationContext());
 
                             // Get the user info for the given user that has posted the message.
                             uRC.getUserByID(
@@ -119,6 +168,10 @@ public class ViewMessage extends ActionBarActivity {
                 }
             }
         );
+
+
+
+
     }
 
     // Setup the map with the things we need.
