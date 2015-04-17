@@ -3,8 +3,8 @@ package uk.co.tomrosier.xetk.losesono.prototype.prototype.utils;
 import android.content.Context;
 
 /**
- * Created by Tom Rosier on 16/02/15.
  * This is a wrapper class for the GPS tracker.
+ * This handles the interaction with the GPS api, getting the correct location and will also be later modified to save power by checking only when its needed.
  */
 public class HandleGPS {
 

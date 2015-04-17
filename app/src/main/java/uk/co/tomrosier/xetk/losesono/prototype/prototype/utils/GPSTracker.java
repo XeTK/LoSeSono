@@ -13,6 +13,10 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+/**
+ * TODO: power saving needs to be implemented.
+ * This handles interaction with the Android GPS and location services.
+ */
 
 // Taken from http://stackoverflow.com/a/15757944
 
