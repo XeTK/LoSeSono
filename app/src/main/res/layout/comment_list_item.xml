@@ -1,7 +1,6 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="75dp" >
+    android:layout_height="50dp" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -9,7 +8,19 @@
         android:text="New Text"
         android:id="@+id/lblCommenterName"
         android:layout_row="0"
-        android:layout_column="0" />
+        android:layout_column="0"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/LBLCommentTime"
+        android:layout_row="0"
+        android:layout_column="6"
+        android:textStyle="bold"
+        android:layout_gravity="right" />
 
     <Space
         android:layout_width="20px"
@@ -28,24 +39,15 @@
     <Space
         android:layout_width="20px"
         android:layout_height="20px"
-        android:layout_row="3"
-        android:layout_column="0" />
+        android:layout_row="2"
+        android:layout_column="1" />
 
-    <ImageButton
+    <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnThumbsUp"
-        android:drawable="@drawable/thumbs_up"
-        android:layout_row="5"
-        android:layout_column="17"
-        android:src="@drawable/thumbs_up" />
+        layout="@layout/fragement_rate_comment"
+        android:layout_row="2"
+        android:layout_column="6" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnThumbsDown"
-        android:drawable="@drawable/thumbs_down"
-        android:layout_row="5"
-        android:layout_column="18"
-        android:src="@drawable/thumbs_down" />
+
 </GridLayout>

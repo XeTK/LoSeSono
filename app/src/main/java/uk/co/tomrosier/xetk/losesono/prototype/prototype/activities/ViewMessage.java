@@ -3,10 +3,15 @@ package uk.co.tomrosier.xetk.losesono.prototype.prototype.activities;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +23,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.ArrayAdapters.CommentArrayAdapter;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
@@ -33,11 +39,13 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.Login;
 /**
  * This is the activity for viewing the messages and showing where they are on the map.
  */
-public class ViewMessage extends ActionBarActivity {
+public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private ArrayList<Comment> listItems = new ArrayList<Comment>();
 
     private CommentArrayAdapter adapter;
+
+    private SwipeRefreshLayout swipeLayout;
 
     // Hold the message ready for it to be used when we need it.
     private Message message;
@@ -53,6 +61,9 @@ public class ViewMessage extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_message);
 
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+
         // Get the extras that have been passed to the activity.
         Bundle extras = getIntent().getExtras();
 
@@ -66,48 +77,6 @@ public class ViewMessage extends ActionBarActivity {
         // Cancel the notification for the message if there is a notification for it.
         manager.cancel(msgID);
 
-
-        ListView lw = (ListView) findViewById(R.id.VMCommentList);
-
-        adapter = new CommentArrayAdapter(this, listItems);
-
-        lw.setAdapter(adapter);
-
-        // Get the user rest client ready for us to get data about the users.
-        final UserRestClient uRC = new UserRestClient(getApplicationContext());
-
-        CommentRestClient crc = new CommentRestClient(getApplicationContext());
-
-        crc.getCommentsByID(
-            msgID,
-            new AjaxCompleteHandler() {
-                @Override
-                public void handleAction(Object someData) {
-
-                    final Comment comment = (Comment)someData;
-
-                    System.out.println("Comment_id: " + comment.getCommentID());
-
-                    uRC.getUserByID(
-                        comment.getUserID(),
-                        new AjaxCompleteHandler() {
-                            @Override
-                            public void handleAction(Object someData) {
-                                User user = (User)someData;
-
-                                Comment userComment = comment;
-
-                                userComment.setUser(user);
-
-                                listItems.add(userComment);
-
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-                    );
-                }
-            }
-        );
 
 
         // Get the message restclient ready to sent our requests.
@@ -125,8 +94,15 @@ public class ViewMessage extends ActionBarActivity {
                     // Grab the user that is currently logged in.
                     User user   = Login.user;
 
+
+
                     // Check that the objects we are working with are not null.
                     if (msg != null && user != null) {
+
+                        message = msg;
+
+                        populateComments();
+
                         // Set it up for viewing someone elses message.
                         if (msg.getUserID() != user.getUserID()) {
                             // Disable editing.
@@ -135,6 +111,9 @@ public class ViewMessage extends ActionBarActivity {
                             menu.findItem(R.id.audience).setVisible(isEditable);
                             // Invalidate what we have.
                             invalidateOptionsMenu();
+
+                            // Get the user rest client ready for us to get data about the users.
+                            UserRestClient uRC = new UserRestClient(getApplicationContext());
 
                             // Get the user info for the given user that has posted the message.
                             uRC.getUserByID(
@@ -169,16 +148,121 @@ public class ViewMessage extends ActionBarActivity {
             }
         );
 
+        Button postComment = (Button) findViewById(R.id.VMBtnComment);
 
+        postComment.setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    swipeLayout.setRefreshing(true);
+
+                    final EditText commentText = (EditText)findViewById(R.id.VMCommentText);
+
+                    String strCommentText = commentText.getText().toString();
+
+                    if (strCommentText != null && strCommentText.length() > 0) {
+                        Comment newComment = new Comment(msgID, Login.user, strCommentText);
+
+                        CommentRestClient crc = new CommentRestClient(getApplicationContext());
+
+                        crc.addComment(
+                            newComment,
+                            new AjaxCompleteHandler() {
+                                @Override
+                                public void handleAction(Object someData) {
+                                    Boolean status = (Boolean) someData;
+
+                                    //if (status == true) {
+                                        ListView lw = (ListView) findViewById(R.id.VMCommentList);
+
+                                        lw.invalidateViews();
+
+                                        Toast.makeText(getApplicationContext(), "Comment Posted", Toast.LENGTH_LONG).show();
+                                        populateComments();
+                                        commentText.setText("");
+                                    //}
+                                }
+                            }
+                        );
+                    }
+
+
+                }
+            }
+        );
 
 
     }
 
+    private void populateComments() {
+
+        swipeLayout.setRefreshing(true);
+
+        listItems = new ArrayList<Comment>();
+
+        ListView lw = (ListView) findViewById(R.id.VMCommentList);
+
+        adapter = new CommentArrayAdapter(this, listItems);
+
+        lw.setAdapter(adapter);
+
+        CommentRestClient crc = new CommentRestClient(getApplicationContext());
+
+        crc.getCommentsByID(
+                message.getMessageID(),
+                new AjaxCompleteHandler() {
+                    @Override
+                    public void handleAction(Object someData) {
+
+                        final Comment comment = (Comment)someData;
+
+                        if (comment == null) {
+                            swipeLayout.setRefreshing(false);
+                            return;
+                        }
+
+                        System.out.println("Comment_id: " + comment.getCommentID());
+
+                        UserRestClient uRC = new UserRestClient(getApplicationContext());
+
+                        uRC.getUserByID(
+                                comment.getUserID(),
+                                new AjaxCompleteHandler() {
+                                    @Override
+                                    public void handleAction(Object someData) {
+                                        User user = (User)someData;
+
+                                        Comment userComment = comment;
+
+                                        userComment.setUser(user);
+
+                                        listItems.add(userComment);
+
+                                        adapter.sort(
+                                                new Comparator<Comment>() {
+                                                    @Override
+                                                    public int compare(Comment arg1, Comment arg0) {
+
+                                                        int diff = (int)(arg1.getCreatedDate().getTime() - arg0.getCreatedDate().getTime());
+
+                                                        return diff;
+                                                    }
+                                                }
+                                        );
+
+                                        adapter.notifyDataSetChanged();
+                                        swipeLayout.setRefreshing(false);
+                                    }
+                                }
+                        );
+                    }
+                }
+        );
+    }
+
     // Setup the map with the things we need.
     private void setUpMapIfNeeded(final Message msg) {
-
-        // Save the message to make it easy to access.
-        this.message = msg;
 
         // Try to obtain the map from the SupportMapFragment.
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.vMsgMapFragment);
@@ -270,5 +354,10 @@ public class ViewMessage extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        populateComments();
     }
 }

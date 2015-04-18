@@ -92,31 +92,59 @@
                             android:id="@+id/textView2"
                             android:layout_row="4"
                             android:layout_column="5" />
+
+
                     </GridLayout>
 
-                    <ListView
+                    <android.support.v4.widget.SwipeRefreshLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/swipe_container"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:id="@+id/VMCommentList"
-                        android:layout_gravity="center_vertical" />
+                        android:layout_height="220dp">
 
-                    <FrameLayout
+                        <ListView
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:id="@+id/VMCommentList"
+                            android:layout_gravity="center_vertical" />
+
+
+                    </android.support.v4.widget.SwipeRefreshLayout>
+
+                    <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <EditText
-                            android:layout_width="289dp"
+                            android:layout_width="275dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/VMCommentText"
-                            android:layout_gravity="left|center_vertical" />
+                            android:layout_gravity="left|center_vertical"
+                            android:layout_row="1"
+                            android:layout_column="1"/>
+
+                        <Space
+                            android:layout_width="20px"
+                            android:layout_height="20px"
+                            android:layout_row="1"
+                            android:layout_column="2" />
 
                         <Button
-                            android:layout_width="85dp"
+                            android:layout_width="60dp"
                             android:layout_height="fill_parent"
-                            android:text="New Button"
+                            android:text="Post"
                             android:id="@+id/VMBtnComment"
-                            android:layout_gravity="right|center_vertical" />
-                    </FrameLayout>
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_row="1"
+                            android:layout_column="3" />
+
+                        <Space
+                            android:layout_width="20px"
+                            android:layout_height="20px"
+                            android:layout_row="1"
+                            android:layout_column="4" />
+                    </GridLayout>
+
                 </LinearLayout>
             </FrameLayout>
 
