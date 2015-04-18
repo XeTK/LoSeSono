@@ -52,14 +52,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="New Text"
-                            android:id="@+id/textView"
+                            android:id="@+id/VMUpVote"
                             android:layout_row="4"
                             android:layout_column="0" />
 
                         <ImageButton
                             android:layout_width="20dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/ibTest1"
+                            android:id="@+id/btnVMUpVote"
                             android:layout_centerHorizontal="true"
                             android:adjustViewBounds="true"
                             android:cropToPadding="false"
@@ -73,7 +73,7 @@
                         <ImageButton
                             android:layout_width="20dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/ibTest"
+                            android:id="@+id/btnVMDownVote"
                             android:layout_centerHorizontal="true"
                             android:adjustViewBounds="true"
                             android:cropToPadding="false"
@@ -89,7 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="New Text"
-                            android:id="@+id/textView2"
+                            android:id="@+id/VMDownVote"
                             android:layout_row="4"
                             android:layout_column="5" />
 

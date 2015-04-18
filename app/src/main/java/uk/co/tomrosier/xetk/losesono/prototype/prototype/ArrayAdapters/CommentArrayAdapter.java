@@ -14,6 +14,7 @@ import java.util.Date;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Comment;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.User;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Vote;
 
 /**
  * This is for the listview on the adding friends to a message page.
@@ -40,9 +41,12 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comment_list_item, parent, false);
         }
 
-        TextView cName    = (TextView) convertView.findViewById(R.id.lblCommenterName);
-        TextView cComment = (TextView) convertView.findViewById(R.id.lblCommentorComment);
-        TextView cTime    = (TextView) convertView.findViewById(R.id.LBLCommentTime);
+        TextView cName      = (TextView) convertView.findViewById(R.id.lblCommenterName);
+        TextView cComment   = (TextView) convertView.findViewById(R.id.lblCommentorComment);
+        TextView cTime      = (TextView) convertView.findViewById(R.id.LBLCommentTime);
+        TextView cUpVotes   = (TextView) convertView.findViewById(R.id.lblUpVotes);
+        TextView cDownVotes = (TextView) convertView.findViewById(R.id.lblDownVotes);
+
 
         User user = comment.getUser();
 
@@ -52,12 +56,21 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
 
-
         String dateStr = dateFormat.format(createdDate);
 
         cName.setText(name);
         cComment.setText(comment.getContent());
         cTime.setText(dateStr);
+
+        Vote vote = comment.getVote();
+
+        String lblPos = String.valueOf(vote.getPositive());
+        String lblNeg = String.valueOf(vote.getNegative());
+
+        cUpVotes.setText(lblPos);
+        cDownVotes.setText(lblNeg);
+
+
 
         // Return the completed view to render on screen
         return convertView;

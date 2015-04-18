@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.VoteType;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Comment;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Vote;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
 
 /**
@@ -20,8 +22,11 @@ public class CommentRestClient {
 
     private RestClient restClient;
 
+    private Context context;
+
     public CommentRestClient(Context context) {
         restClient = new RestClient(context);
+        this.context = context;
     }
 
     public void getCommentsByID(Integer msgId, final AjaxCompleteHandler handler) {
@@ -39,13 +44,29 @@ public class CommentRestClient {
                                     handler.handleAction(null);
                                 } else {
                                     for (int i = 0; i < response.length(); i++) {
-                                        JSONObject commentObj = response.getJSONObject(i);
+                                        final JSONObject commentObj = response.getJSONObject(i);
 
-                                        Comment comment = new Comment(commentObj);
-                                        handler.handleAction(comment);
+                                        VoteRestClient vrc = new VoteRestClient(context);
 
+                                        vrc.getVoteByID(
+                                                commentObj.getInt("comment_id"),
+                                                VoteType.comment,
+                                                new AjaxCompleteHandler() {
+                                                    @Override
+                                                    public void handleAction(Object someData) {
+                                                        Vote vote = (Vote) someData;
+                                                        try {
+                                                            Comment comment = new Comment(commentObj, vote);
+                                                            handler.handleAction(comment);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                        );
                                     }
                                 }
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

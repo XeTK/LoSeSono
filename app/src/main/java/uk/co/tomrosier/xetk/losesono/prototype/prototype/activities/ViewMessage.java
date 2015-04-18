@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,9 +32,12 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.CommentRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.MessageRestClient;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.UserRestClient;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.VoteRestClient;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.VoteType;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Comment;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Message;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.User;
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.entities.Vote;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandler;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.Login;
 
@@ -192,6 +197,8 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
             }
         );
 
+        ImageButton upVote   = (ImageButton) findViewById(R.id.btnVMDownVote);
+        ImageButton downVote = (ImageButton) findViewById(R.id.btnVMUpVote);
 
     }
 
@@ -215,7 +222,7 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                     @Override
                     public void handleAction(Object someData) {
 
-                        final Comment comment = (Comment)someData;
+                        final Comment comment = (Comment) someData;
 
                         if (comment == null) {
                             swipeLayout.setRefreshing(false);
@@ -231,7 +238,7 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                                 new AjaxCompleteHandler() {
                                     @Override
                                     public void handleAction(Object someData) {
-                                        User user = (User)someData;
+                                        User user = (User) someData;
 
                                         Comment userComment = comment;
 
@@ -244,7 +251,7 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                                                     @Override
                                                     public int compare(Comment arg1, Comment arg0) {
 
-                                                        int diff = (int)(arg1.getCreatedDate().getTime() - arg0.getCreatedDate().getTime());
+                                                        int diff = (int) (arg1.getCreatedDate().getTime() - arg0.getCreatedDate().getTime());
 
                                                         return diff;
                                                     }
@@ -256,6 +263,34 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                                     }
                                 }
                         );
+                    }
+                }
+        );
+        refreshVotes();
+    }
+
+    private void refreshVotes(){
+
+        VoteRestClient vrc = new VoteRestClient(getApplicationContext());
+
+        vrc.getVoteByID(
+                message.getMessageID(),
+                VoteType.message,
+                new AjaxCompleteHandler() {
+                    @Override
+                    public void handleAction(Object someData) {
+
+                        Vote vote = (Vote) someData;
+
+                        TextView upVote   = (TextView) findViewById(R.id.VMUpVote);
+                        TextView downVote = (TextView) findViewById(R.id.VMDownVote);
+
+                        String lblPos = String.valueOf(vote.getPositive());
+                        String lblNeg = String.valueOf(vote.getNegative());
+
+                        upVote.setText(lblPos);
+                        downVote.setText(lblNeg);
+
                     }
                 }
         );

@@ -23,8 +23,10 @@ public class Comment {
 
     private Date createdDate;
 
+    private Vote vote;
 
-    public Comment(JSONObject obj) throws JSONException {
+
+    public Comment(JSONObject obj, Vote vote) throws JSONException {
         this.commentID = obj.getInt("comment_id");
         this.messageID = obj.getInt("message_id");
         this.userID    = obj.getInt("user_id");
@@ -38,6 +40,8 @@ public class Comment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        this.vote = vote;
     }
 
     public Comment(int messageID, User user, String content) {
@@ -73,5 +77,9 @@ public class Comment {
 
     public User getUser() {
         return user;
+    }
+
+    public Vote getVote() {
+        return vote;
     }
 }
