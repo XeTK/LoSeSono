@@ -86,29 +86,31 @@ public class MessageFriendsActivity extends ActionBarActivity {
                                 // Get the friend object from the adapter view.
                                 Friend fi = adapter.getItem(i);
 
-                                // Get the message rest client ready to append the friend to the message.
-                                MessageRestClient mRC = new MessageRestClient(getApplicationContext());
+                                if (fi.isChecked()) {
+                                    // Get the message rest client ready to append the friend to the message.
+                                    MessageRestClient mRC = new MessageRestClient(getApplicationContext());
 
-                                // Add the user to the message.
-                                mRC.addUser(
-                                    new AjaxCompleteHandler() {
-                                        @Override
-                                        public void handleAction(Object someData) {
-                                            int groupID = (int) someData;
-                                            System.out.println("GroupID: " + groupID);
-                                        }
-                                    },
-                                    messageID,
-                                    fi.getLinkID()
-                                );
-
-                                // Close the activity.
-                                finish();
-                                // Go back to the home activity.
-                                Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
-                                startActivity(intent);
+                                    // Add the user to the message.
+                                    mRC.addUser(
+                                            new AjaxCompleteHandler() {
+                                                @Override
+                                                public void handleAction(Object someData) {
+                                                    int groupID = (int) someData;
+                                                    System.out.println("GroupID: " + groupID);
+                                                }
+                                            },
+                                            messageID,
+                                            fi.getLinkID()
+                                    );
+                                }
                             }
+                            // Close the activity.
+                            finish();
+                            // Go back to the home activity.
+                            Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                            startActivity(intent);
                         }
+
                     }
             );
         }

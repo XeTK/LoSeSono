@@ -120,7 +120,7 @@ public class NavigationActivity extends ActionBarActivity {
                                 // If the selected marker is the one that is the users current location then we load the message generator page.
                                 if (marker == myLocation) {
                                     // Create the intent to swap to that activity.
-                                    Intent intent = new Intent(getApplicationContext(), PostMessageAcvitiy.class);
+                                    Intent intent = new Intent(getApplicationContext(), PostMessageActivity.class);
 
                                     startActivity(intent);
                                 } else {
@@ -258,7 +258,7 @@ public class NavigationActivity extends ActionBarActivity {
 
         // Load the activity that enables the user to post a message.
         if (id == R.id.action_post_message) {
-            Intent intent = new Intent(this, PostMessageAcvitiy.class);
+            Intent intent = new Intent(this, PostMessageActivity.class);
             startActivity(intent);
         }
 

@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.PostMessageAcvitiy">
+    tools:context="uk.co.tomrosier.xetk.losesono.prototype.prototype.activities.PostMessageActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -50,10 +50,10 @@
                     android:hint="Message"
                     android:layout_gravity="left|top" />
 
-                <ExpandableListView
+                <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="68dp"
-                    android:id="@+id/expandableListView"
+                    android:id="@+id/PMRangeList"
                     android:layout_gravity="center_horizontal|bottom" />
 
             </FrameLayout>
@@ -61,14 +61,4 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ExpandableListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/expandableListView2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="550dp"
-        android:layout_marginStart="550dp"
-        android:layout_marginTop="82dp" />
 </RelativeLayout>

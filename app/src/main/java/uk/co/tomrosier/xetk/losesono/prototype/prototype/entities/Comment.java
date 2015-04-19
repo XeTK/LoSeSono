@@ -9,23 +9,28 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by xetk on 17/04/15.
+ * This is a comment within the application and is shown on the tags.
  */
 public class Comment {
 
+    // This is the ID's to link everything together correctly.
     private int commentID;
     private int messageID;
     private int userID;
 
+    // This is the actual comment string.
     private String content;
 
+    // User object so we can refrence it later.
     private User user;
 
+    // This is the date the comment was created.
     private Date createdDate;
 
+    // This is the rating of the comment, we keep this to make it easy to access later.
     private Vote vote;
 
-
+    // Create the object from the info passed in from the server to make a Java representation of the server object.
     public Comment(JSONObject obj, Vote vote) throws JSONException {
         this.commentID = obj.getInt("comment_id");
         this.messageID = obj.getInt("message_id");
@@ -44,12 +49,15 @@ public class Comment {
         this.vote = vote;
     }
 
+    // This is if we don't create the object from the server object.
     public Comment(int messageID, User user, String content) {
         this.messageID = messageID;
         this.user      = user;
         this.content   = content;
         this.userID    = user.getUserID();
     }
+
+    // Getter's and setter's.
 
     public int getCommentID() {
         return commentID;
@@ -77,6 +85,10 @@ public class Comment {
 
     public User getUser() {
         return user;
+    }
+
+    public void setVote(Vote vote) {
+        this.vote = vote;
     }
 
     public Vote getVote() {

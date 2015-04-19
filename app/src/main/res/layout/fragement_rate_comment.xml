@@ -17,7 +17,7 @@
     <ImageButton
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        android:id="@+id/ibTest1"
+        android:id="@+id/btnUpVote"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
@@ -31,7 +31,7 @@
     <ImageButton
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        android:id="@+id/ibTest"
+        android:id="@+id/btnDownVote"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:cropToPadding="false"

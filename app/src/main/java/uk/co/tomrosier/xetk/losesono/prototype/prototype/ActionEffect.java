@@ -1,7 +1,7 @@
 package uk.co.tomrosier.xetk.losesono.prototype.prototype;
 
 /**
- * Created by xetk on 18/04/15.
+ * This is the two effects than can be add when voting on a post or message, made them enums to make them easy to track.
  */
 public enum ActionEffect {
     positive,

@@ -36,12 +36,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name" >
-
-        </activity>
-
-        <activity
             android:name=".activities.NotificationActivity"
             android:taskAffinity=""
             android:excludeFromRecents="true">
@@ -69,7 +63,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.PostMessageAcvitiy"
+            android:name=".activities.PostMessageActivity"
             android:label="@string/title_activity_post_message_acvitiy" >
         </activity>
         <activity

@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import uk.co.tomrosier.xetk.losesono.prototype.prototype.ActionEffect;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.ArrayAdapters.CommentArrayAdapter;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.R;
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.RestClient.CommentRestClient;
@@ -42,14 +43,17 @@ import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.AjaxCompleteHandl
 import uk.co.tomrosier.xetk.losesono.prototype.prototype.utils.Login;
 
 /**
- * This is the activity for viewing the messages and showing where they are on the map.
+ * This is the activity for viewing the messages and showing where they are on the map. It also has commenting and vote potential.
  */
 public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    // Keep a list of the comments currently viewable on the page.
     private ArrayList<Comment> listItems = new ArrayList<Comment>();
 
+    // This is the view adapter that holds all of the comments.
     private CommentArrayAdapter adapter;
 
+    // We need this for detecting if the user has swiped down on the list view to refresh.
     private SwipeRefreshLayout swipeLayout;
 
     // Hold the message ready for it to be used when we need it.
@@ -58,7 +62,7 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
     // Keep the menu ready to access as we might modify it.
     private Menu menu;
 
-    // This disabled the abiliy to edit the the post.
+    // This disabled the ability to edit the the post.
     private boolean isEditable = true;
 
     @Override
@@ -99,13 +103,12 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                     // Grab the user that is currently logged in.
                     User user   = Login.user;
 
-
-
                     // Check that the objects we are working with are not null.
                     if (msg != null && user != null) {
 
                         message = msg;
 
+                        // Populate the list of comments on the page.
                         populateComments();
 
                         // Set it up for viewing someone elses message.
@@ -134,6 +137,7 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                                 }
                             );
 
+                            // This marks the message as read.
                             mRC.addMessageRead(
                                     msgID,
                                     new AjaxCompleteHandler() {
@@ -153,43 +157,67 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
             }
         );
 
+        // This is the button that posts the comment to the server.
         Button postComment = (Button) findViewById(R.id.VMBtnComment);
 
+        // This is the on handler for that comment button.
         postComment.setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    swipeLayout.setRefreshing(true);
-
+                    // Get the element holding the comment text.
                     final EditText commentText = (EditText)findViewById(R.id.VMCommentText);
 
-                    String strCommentText = commentText.getText().toString();
+                    // Check that it isnt null.. as that sometimes happens.
+                    if (commentText != null) {
 
-                    if (strCommentText != null && strCommentText.length() > 0) {
-                        Comment newComment = new Comment(msgID, Login.user, strCommentText);
+                        // Get the string from the element.
+                        String strCommentText = commentText.getText().toString();
 
-                        CommentRestClient crc = new CommentRestClient(getApplicationContext());
+                        // If the user actually has entered something then we continue.
+                        if (strCommentText != null && strCommentText.length() > 0) {
 
-                        crc.addComment(
-                            newComment,
-                            new AjaxCompleteHandler() {
-                                @Override
-                                public void handleAction(Object someData) {
-                                    Boolean status = (Boolean) someData;
+                            // Set the comment list to be refreshing as a dialog to show something is happening.
+                            swipeLayout.setRefreshing(true);
 
-                                    //if (status == true) {
-                                        ListView lw = (ListView) findViewById(R.id.VMCommentList);
+                            // Generate a new comment from the information we have.
+                            Comment newComment = new Comment(msgID, Login.user, strCommentText);
 
-                                        lw.invalidateViews();
+                            // Get the rest client ready for sending our request to the server.
+                            CommentRestClient crc = new CommentRestClient(getApplicationContext());
 
-                                        Toast.makeText(getApplicationContext(), "Comment Posted", Toast.LENGTH_LONG).show();
-                                        populateComments();
-                                        commentText.setText("");
-                                    //}
-                                }
-                            }
-                        );
+                            // Send the new comment to the server. And let the server add it to the right place.
+                            crc.addComment(
+                                    newComment,
+                                    new AjaxCompleteHandler() {
+                                        @Override
+                                        public void handleAction(Object someData) {
+                                            // Get the status of the request that we are working with.
+                                            Boolean status = (Boolean) someData;
+
+                                            //if (status == true) {
+
+                                            // Get the listview that holds all the comments we are working with.
+                                            ListView lw = (ListView) findViewById(R.id.VMCommentList);
+
+                                            // Invalidate the contents of the listview as the data has changed.
+                                            lw.invalidateViews();
+
+                                            // Say the comment has been posted.
+                                            Toast.makeText(getApplicationContext(), "Comment Posted", Toast.LENGTH_LONG).show();
+
+                                            // Repopulate the listview with the new comments.
+                                            populateComments();
+
+                                            // Clear the box for adding a new comment.
+                                            commentText.setText("");
+                                            //}
+                                        }
+                                    }
+                            );
+
+                        }
                     }
 
 
@@ -197,60 +225,127 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
             }
         );
 
-        ImageButton upVote   = (ImageButton) findViewById(R.id.btnVMDownVote);
-        ImageButton downVote = (ImageButton) findViewById(R.id.btnVMUpVote);
+        // Get the voting buttons for the message and make them easily accessible to change the vote levels on the message.
+        ImageButton upVote   = (ImageButton) findViewById(R.id.btnVMUpVote);
+        ImageButton downVote = (ImageButton) findViewById(R.id.btnVMDownVote);
 
+        // Register the click events on pressing the upvote and downvote buttons.
+        upVote.setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // This upvotes the message.
+                    vote(ActionEffect.positive);
+                }
+            }
+        );
+
+        // Downvote the message.
+        downVote.setOnClickListener(
+            new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    vote(ActionEffect.negative);
+                }
+            }
+        );
     }
 
+    // This is the method for dealing with voting.
+    private void vote(ActionEffect ae) {
+
+        // Get the rest client ready for dealing with the request.
+        VoteRestClient vrc = new VoteRestClient(getApplicationContext());
+
+        // Call the server and add the vote to the message.
+        vrc.addVote(
+            message.getMessageID(),
+            VoteType.message,
+            ae,
+            new AjaxCompleteHandler() {
+                @Override
+                public void handleAction(Object someData) {
+                    // Notify the user there vote has actually been added to the message.
+                    Toast.makeText(getApplicationContext(), "Vote Added", Toast.LENGTH_LONG).show();
+
+                    // Refresh the votes.
+                    refreshVotes();
+                }
+            }
+        );
+    }
+
+    // This populates the comment list on the page for the message.
     private void populateComments() {
 
+        // Tell the UI we are refreshing the box.
         swipeLayout.setRefreshing(true);
 
+        // Create a fresh list to hold the comments in.
         listItems = new ArrayList<Comment>();
 
+        // Get the list view ready to repopilate.
         ListView lw = (ListView) findViewById(R.id.VMCommentList);
 
+        // Reset the display adapter ready with the new list of items.
         adapter = new CommentArrayAdapter(this, listItems);
 
+        // Re assign the list view to the new adapter.
         lw.setAdapter(adapter);
 
+        // Get the comment rest client ready to get the list of comments from the server.
         CommentRestClient crc = new CommentRestClient(getApplicationContext());
 
+        // Get the list of comments by the message id.
         crc.getCommentsByID(
                 message.getMessageID(),
                 new AjaxCompleteHandler() {
                     @Override
                     public void handleAction(Object someData) {
 
+                        // Get the comment that we are working with.
                         final Comment comment = (Comment) someData;
 
+                        // If the comment is null then its no good... or there is no comments for this message.
                         if (comment == null) {
+                            // Disable the refreshing prompt.
                             swipeLayout.setRefreshing(false);
+
+                            // TODO: make this less sketchy.
+                            // Exit!
                             return;
                         }
 
                         System.out.println("Comment_id: " + comment.getCommentID());
 
+                        // This is the rest client for getting information on the user.
                         UserRestClient uRC = new UserRestClient(getApplicationContext());
 
+                        // Get the user by id.
                         uRC.getUserByID(
                                 comment.getUserID(),
                                 new AjaxCompleteHandler() {
                                     @Override
                                     public void handleAction(Object someData) {
+                                        // Get a Java user object that we can then use within the Android app.
                                         User user = (User) someData;
 
+                                        // Get the comment ready to manipulate.
                                         Comment userComment = comment;
 
+                                        // Set the user to the the one we just got.
                                         userComment.setUser(user);
 
+                                        // Add the comment to the list of comments we are displaying.
                                         listItems.add(userComment);
 
+                                        // Sort the listview adapter in time.
                                         adapter.sort(
                                                 new Comparator<Comment>() {
                                                     @Override
                                                     public int compare(Comment arg1, Comment arg0) {
 
+                                                        // Minus one time from the other to get the differnece.
                                                         int diff = (int) (arg1.getCreatedDate().getTime() - arg0.getCreatedDate().getTime());
 
                                                         return diff;
@@ -258,7 +353,9 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                                                 }
                                         );
 
+                                        // Notify the adapter the items have changed so redraw.
                                         adapter.notifyDataSetChanged();
+                                        // We are done so we are not refreshing any more.
                                         swipeLayout.setRefreshing(false);
                                     }
                                 }
@@ -269,10 +366,13 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
         refreshVotes();
     }
 
+    // This refreshes the bar below the map that holds the vote information for the users.
     private void refreshVotes(){
 
+        // Get the vote rest client ready to get the information that we need.
         VoteRestClient vrc = new VoteRestClient(getApplicationContext());
 
+        // This gets the votes by the id of the message.
         vrc.getVoteByID(
                 message.getMessageID(),
                 VoteType.message,
@@ -280,14 +380,18 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
                     @Override
                     public void handleAction(Object someData) {
 
+                        // Get the vote object from the server.
                         Vote vote = (Vote) someData;
 
+                        // Get the ui elements we want to change the value for, theses are labels holding the count of the votes.
                         TextView upVote   = (TextView) findViewById(R.id.VMUpVote);
                         TextView downVote = (TextView) findViewById(R.id.VMDownVote);
 
+                        // Convert the int values we have for the votes into strings that we can append to the labels. Other wise we get exceptions.
                         String lblPos = String.valueOf(vote.getPositive());
                         String lblNeg = String.valueOf(vote.getNegative());
 
+                        // Set the label text.
                         upVote.setText(lblPos);
                         downVote.setText(lblNeg);
 
@@ -391,6 +495,7 @@ public class ViewMessage extends ActionBarActivity implements SwipeRefreshLayout
         return super.onOptionsItemSelected(item);
     }
 
+    // This is what is called when the pull down on the list view is triggered.
     @Override
     public void onRefresh() {
         populateComments();
